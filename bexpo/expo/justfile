@@ -1,0 +1,28 @@
+# Justfile for compiling the bachelor exposé (Fish shell compatible)
+default:
+	@just --summary
+
+# Compile and open with Okular
+preview:
+	latexmk -lualatex -interaction=nonstopmode bexpo.tex
+	okular bexpo.pdf &
+
+# Compile only
+render:
+	latexmk -lualatex -interaction=nonstopmode bexpo.tex
+
+# Remove all build artifacts including PDF
+cleanup:
+	latexmk -C
+
+# Rebuild from scratch
+rerender:
+	just cleanup
+	just render
+
+# View simplified directory layout
+tree:
+	tree -I '*.aux|*.log|*.fls|*.fdb_latexmk|*.synctex.gz|*.toc|*.out|*.bbl|*.blg|*.pdf'
+
+# Ensure Fish compatibility
+set shell := ["fish", "-c"]
