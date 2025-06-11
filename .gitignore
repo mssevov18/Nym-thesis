@@ -1,0 +1,42 @@
+# Compiled document
+*.dvi
+*.ps
+
+# LaTeX intermediate files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+*.vrb
+
+# Index files
+*.idx
+*.ilg
+*.ind
+
+# Backup and swap files
+*~
+*.bak
+*.backup
+*.swp
+*.swx
+
+# Code listings cache
+*.pyg
+
+# Latexmk and other build dirs
+.latexmkrc
+_build/
+latexmkrc
+
+# OS generated files
+.DS_Store
+Thumbs.db
