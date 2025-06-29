@@ -1,0 +1,54 @@
+* Assumption
+1 month = 3 weeks
+
+* Thesis Deadline
+4th of May 2026
+
+* 2025
+** June
+*** Finish Expose - due 26th June
+*** Light Literature Review - 1 week
+
+** July
+*** Research Survey (RS) & Architecture Planning - 2 weeks
+*** Design UI & mockup - 1 week
+
+** August
+*** Write & Pilot RS - 1 week
+*** Launch RS & promote - 1 week
+*** Analyse RS results - 1 week
+
+** September
+*** Plan, Define Prototype Components - 1 week
+*** Small-scale code prototype - 2 weeks
+
+** October
+*** Core Backend Dev - 3 weeks
+
+** November
+*** Frontend, Terminal, Dev - 1 week
+*** Frontend, Phone, Dev - 2 weeks
+
+** December
+*** Finalise method of peer-to-peer communication (QR / Alternative) - 1 week
+*** Testing Internal Prototype - 1 week
+*** Prepare Pre-Post Surveys (BS, AS) - 1 week
+
+* 2026
+** January
+*** Recruit Users for Trial - 1 week
+*** Export, Publish, the latest stable Release Candidate (RC) - 2 weeks
+
+** Feb...
+*** Run User Trial - 3 weeks
+
+** March
+*** Collect & Clean Data - 1 week
+*** Analyze Quantitative and Qualitative Data. Are Research Questions answered? - 2 weeks
+
+** April
+*** Write Thesis - 2 weeks
+*** Revise, Proofread, Format - 1 week
+
+** May
+*** Submit Thesis

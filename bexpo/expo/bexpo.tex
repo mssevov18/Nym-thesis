@@ -17,9 +17,13 @@
 \usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{longtable}
+\usepackage{array} % for raggedright column definitions
 
 
 \begin{document}
+\let\cleardoublepage\clearpage
+
 \frontmatter\maketitle%
 \begin{declarations}\end{declarations}%
 \addtoToC{Table of Contents}%
@@ -30,9 +34,9 @@
 \listoftables
 \clearpage
 
-\addtoToC{List of Figures}%
-\listoffigures
-\clearpage
+% \addtoToC{List of Figures}%
+% \listoffigures
+% \clearpage
 
 
 %   MAIN MATTER  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,18 +48,31 @@
   % Objectives
   % Methodology (brief)
   % Expected results
+This exposé outlines the concept and initial development plan for "Nym", a decentralized digital contacts application that empowers users to manage their social relationships intentionally and privately. The project responds to increasing concerns over data exploitation and social metricization in mainstream platforms. Nym will enable peer-to-peer contact sharing, context-aware identity management, and reflection on relationship health, supported by a local backend accessible via mobile and terminal interfaces. The prototype will focus on core functionality - real contact exchange and minimal user interface - with QR or text-based communication as a central feature. A mixed-method evaluation involving 10-15 active and 30-60 passive users will assess changes in perceived connectedness, reflection, and usability. Expected outcomes include both insights into privacy-aware design and a proof-of-concept tool for user-centered social infrastructure.
 \end{abstract}
 
 %===========================================
 \chapter{Introduction}
 % Brief context, problem importance, and the project’s big idea
+Digital communication tools have become central to how people form and maintain relationships. However, most mainstream platforms - especially social media - are designed around engagement metrics, centralized data collection, and opaque identity management. While these tools claim to bring people together, they often fragment genuine connection and commodify social interaction.
 
+There is a growing cultural and academic concern regarding the loss of user agency in digital spaces. Personal data is increasingly abstracted away from users and repurposed for monetization or algorithmic filtering. This trend not only undermines privacy, but also discourages reflection on the quality and health of one's relationships.
 
+In response, this exposé introduces \textit{Nym} - a decentralized digital contacts application that rethinks how we manage personal connection. The tool prioritizes user control, selective sharing, and interpersonal intentionality. Technically, it leverages a device-local backend server model that operates independently of cloud infrastructure. This enables secure peer-to-peer exchange of contact information, using QR codes or text-based transfers, without requiring user accounts or permanent data storage on third-party systems.
+
+The overarching goal of this project is to explore how decentralized, privacy-first design can support more meaningful, user-directed social interaction. The following chapters define the problem space, outline the intended research questions and objectives, and detail the methodological approach to prototype and evaluate this concept.
 
 %===========================================
 \chapter{Problem Statement}
 % What exact issue are you solving? Why is it a problem?
 
+Modern contact management and social networking platforms are not designed with user autonomy, privacy, or intentionality at their core. They operate on centralized infrastructures that prioritize user engagement and data collection over meaningful relationship building. As a result, users are rarely in full control of how they present themselves, who sees what, and how their digital relationships are structured.
+
+Existing tools offer limited flexibility in defining interpersonal boundaries or selectively sharing information based on context. Contact lists are often static, and sharing is binary: either someone is in your network or they are not, with little nuance in between. Furthermore, users have few opportunities to reflect on the state of their social connections or to manage them deliberately over time.
+
+This lack of privacy-aware, user-directed alternatives creates a significant gap in digital communication. It impairs not only users’ ability to maintain relationships on their own terms, but also limits opportunities for healthy introspection about social wellbeing. There is a clear need for a tool that treats contact management as a personal process, not a commodified graph.
+
+This exposé addresses this problem by proposing a prototype that supports secure, peer-to-peer contact exchange and enables context-based identity management - without relying on centralized services.
 
 
 %===========================================
@@ -63,6 +80,16 @@
 % - RQ1:
 % - RQ2:
 % What are the specific questions this exposé aims to answer?
+This exposé aims to investigate the impact of a decentralized, privacy-first contact management tool on users' social experience and self-reflection. The core research questions guiding this project are:
+
+\begin{itemize}
+  \item \textbf{RQ1:} Does using a privacy-aware, device-local contact tool improve users’ sense of interpersonal connectedness?
+  \item \textbf{RQ2:} Does such a tool encourage greater intrapersonal reflection about social relationships?
+  \item \textbf{RQ3:} How do users interact with and perceive context-based sharing (e.g., personas) in peer-to-peer contact exchange?
+  \item \textbf{RQ4:} What are the usability and adoption challenges of deploying a decentralized contact tool across diverse user types?
+\end{itemize}
+
+These questions aim to explore both the functional value and the psychological/social impact of Nym, and inform design choices that support user agency without compromising ease of use.
 
 
 
@@ -71,7 +98,29 @@
 % - Build/prototype...
 % - Investigate...
 % - Evaluate...
+The overarching goal of this project is to design and evaluate a user-centric, privacy-respecting contact management prototype that supports intentional social interactions. The specific objectives are as follows:
 
+\begin{itemize}
+  \item \textbf{Prototype Development:}
+  \begin{itemize}
+    \item Build a functional, device-local backend server to manage contact data securely.
+    \item Implement a peer-to-peer exchange mechanism using QR codes or other local media.
+    \item Design minimal, platform-specific frontends (e.g., mobile or terminal-based).
+  \end{itemize}
+
+  \item \textbf{Contextual Sharing:}
+  \begin{itemize}
+    \item Develop a flexible persona system for selective data sharing based on context.
+    \item Ensure users can define what contact data is shared under which persona.
+  \end{itemize}
+
+  \item \textbf{User Evaluation:}
+  \begin{itemize}
+    \item Assess the prototype's impact on users’ sense of connectedness and self-awareness.
+    \item Collect qualitative and quantitative feedback to guide future iterations.
+    \item Identify usability issues and adoption barriers in real-world scenarios.
+  \end{itemize}
+\end{itemize}
 
 
 %===========================================
@@ -79,36 +128,207 @@
 % What existing work or tools already address this area?
 % Where are the gaps?
 
+While mainstream social platforms rarely measure or support user well-being, research in mental health and digital engagement has produced validated instruments to assess connectedness, emotional health, and psychological impact \cite{batterham2020mental}. These tools help inform the evaluative framework used in Nym’s prototype.
+
+Today, digital contact management is dominated by centralized platforms and proprietary ecosystems. Major social media services like Facebook, LinkedIn, and Instagram integrate identity and messaging systems, but prioritize engagement and network expansion over privacy or relationship depth. Similarly, default tools like Google Contacts or Apple’s Contacts rely heavily on cloud synchronization, limiting user control over data flow and sharing granularity.
+
+Alternative communication platforms have emerged, such as secure messaging apps (e.g., Signal, Threema) and federated networks (e.g., Mastodon). While these tools emphasize encryption or decentralization, they focus on content exchange rather than contact modeling. Few offer context-aware identity presentation or user-defined personas.
+
+From a usability standpoint, most systems do not support intentional relationship management. Contact lists remain static and rarely encourage reflection, tagging, or emotional annotation. Some research prototypes explore affective computing or social visualizations, but these often require intrusive data and remain unavailable to end users.
+
+Technically, the idea of a device-local backend server is rare in mainstream consumer software. While some peer-to-peer or serverless apps exist, they are limited in scope. Decentralized identity systems like those in the Self-Sovereign Identity (SSI) space offer powerful concepts but remain overly complex for general users.
+
+In contrast, *Nym* aims to unify privacy-by-design, local-first architecture, and reflective relationship tooling in a minimal, user-friendly interface. Its QR or token-based peer-to-peer exchange avoids reliance on cloud infrastructure while allowing secure and flexible sharing. The persona system introduces a lightweight way to adapt identity presentation to different social contexts.
+
+This project addresses the gap in accessible, privacy-conscious, and reflective contact tools. It offers users a way to manage digital relationships intentionally, without requiring platform lock-in or technical expertise.
 
 
 %===========================================
 \chapter{Methodology}
-% Step-by-step plan to answer your research questions.
-% Tools, participants, architecture, design phases, etc.
+%   Step-by-step plan to answer your research questions.
+%   Tools, participants, architecture, design phases, etc.
+% Design Approach
+%   UX-first, privacy by design
+% Prototype Development
+% Data Collection Methods
+%   surveys, usage tracking where opt-in
+% Participants
+
+This project follows an exploratory, user-centered design process to develop and evaluate \textit{Nym}, a privacy-first decentralized contacts tool. The methodology includes early-stage exploratory research, iterative prototype development, and a mixed-method evaluation. This chapter outlines the structured phases of design, implementation, data collection, and participant involvement.
+
 \section{Design Approach}
-% UX-first, privacy by design
+
+The system architecture is centered around a \textbf{device-local backend server}, enabling the application to function without centralized infrastructure or persistent external data sync. This backend exposes a small API used by frontends tailored for mobile or terminal usage.
+
+Key design principles:
+\begin{itemize}
+  \item \textbf{Privacy by Design:} All data remains on-device unless explicitly shared.
+  \item \textbf{Contextual Sharing:} Users create multiple "personas" and selectively share context-relevant identity subsets.
+  \item \textbf{Intentionality:} Contact exchanges occur through deliberate interaction, typically in person (e.g., QR codes or text-based transfers).
+\end{itemize}
+
 \section{Prototype Development}
+
+The prototype consists of:
+\begin{itemize}
+  \item A lightweight, device-local backend (headless server) handling all contact data and logic.
+  \item One or more thin clients (initially a terminal-based interface, eventually mobile) interacting with the backend.
+  \item A working contact exchange mechanism (QR codes or equivalents), capable of transmitting full or partial persona data between peers.
+\end{itemize}
+
+The focus is on reliability, privacy integrity, and flexibility in information sharing, not UI polish.
+
 \section{Data Collection Methods}
-% surveys, usage tracking where opt-in
+
+\subsection{Research Survey (RS)}
+
+Before prototype deployment, a dedicated Research Survey will be conducted to:
+\begin{itemize}
+  \item Capture user frustrations with existing social/contact platforms
+  \item Identify desired features and boundaries for trust
+  \item Gather qualitative feedback about how people conceptualize “connection” and privacy
+\end{itemize}
+This survey helps inform and prioritize feature design in the prototype.
+
+\subsection{Pre- and Post-Usage Surveys (BS / AS)}
+
+Participants selected for testing will fill out:
+\begin{itemize}
+  \item A \textbf{Baseline Survey (BS)} before using the prototype, measuring:
+    \begin{itemize}
+      \item Subjective sense of connectedness
+      \item Relationship reflection habits
+      \item Openness to privacy-first tools
+    \end{itemize}
+  \item An \textbf{After Survey (AS)} following the usage phase, assessing:
+    \begin{itemize}
+      \item Changes in connectedness and reflection
+      \item Perceived utility and usability
+      \item Feedback on personas and contact exchange mechanics
+    \end{itemize}
+\end{itemize}
+
+Both surveys will include Likert-scale items and optional open-ended questions.
+
+\subsection{Usage Data (UD)}
+
+With informed consent, minimal anonymized usage data will be logged:
+\begin{itemize}
+  \item Number of contacts created or exchanged
+  \item Persona features used
+  \item Frequency and nature of interactions
+\end{itemize}
+
+No usage data leaves the user’s device unless manually exported and submitted.
+
 \section{Participants}
 
+Two levels of engagement are anticipated:
+\begin{itemize}
+  \item \textbf{Active Testers} (10-15 people): Will use the prototype for an extended period and complete all three surveys (RS, BS, AS).
+  \item \textbf{Light Participants} (30-60 people): May participate in demonstrations or one-time exchanges, giving limited feedback.
+\end{itemize}
+
+Participants will be sourced from the author’s academic and social circles, and all ethical and data privacy considerations will be strictly observed.
 
 
 %===========================================
 \chapter{Challenges}
 % Anticipated difficulties and mitigation strategies.
-\section{Technical Challenges}%
-\section{User-Centric Challenges}%
+% Technical Challenges%
+% User-Centric Challenges%
 % User adoption, Privacy perception, behavioral friction
-\section{Bias and Reliability Concerns}%
+% Bias and Reliability Concerns%
+
+The development and evaluation of a decentralized contact management tool like \textit{Nym} involves several anticipated challenges. These span technical limitations, user behavior and expectations, and research methodology concerns. This chapter outlines the most significant risks and how they will be addressed.
+
+\section{Technical Challenges}
+
+\subsection*{Cross-Platform Compatibility}
+Since Nym will expose a device-local backend server, different client UIs (terminal, mobile) may be developed in parallel. Ensuring smooth communication, consistent API behavior, and device-specific support (e.g., QR generation) across platforms introduces integration risks.
+
+\textit{Mitigation:} API contracts will be kept minimal and well-documented. Terminal interface will serve as the reference frontend for early testing, reducing initial platform complexity.
+
+\subsection*{Peer-to-Peer Transfer Robustness}
+Implementing QR and text-based contact exchange reliably across varied devices (e.g., screen sizes, lighting, OCR accuracy) is non-trivial, especially in offline-first conditions.
+
+\textit{Mitigation:} The prototype will test multiple encodings (e.g., Base64, custom short formats) and fallback mechanisms (e.g., raw text copy/paste) to ensure resilience.
+
+\subsection*{On-Device Data Security}
+While decentralization minimizes external risk, improper local storage could still expose sensitive user data.
+
+\textit{Mitigation:} Data will be stored locally using common platform mechanisms (e.g., OS keychain or encrypted flat files), with emphasis on opt-in data persistence and easy deletion.
+
+\section{User-Centric Challenges}
+
+\subsection*{Privacy Perception and Trust}
+Ironically, users may feel more uncertain about using a local, unfamiliar tool than a cloud-based one. Lack of visible infrastructure can hinder trust in the system’s robustness or privacy.
+
+\textit{Mitigation:} Clear onboarding will explain the architecture and local-first principles. No background data sync or tracking will be performed.
+
+\subsection*{Adoption Barriers}
+Users are accustomed to polished, frictionless social apps. The minimalist UI, limited features, or intentional slowness (e.g., no automatic syncing) may create friction.
+
+\textit{Mitigation:} The interface will be designed with clarity and responsiveness in mind. Feedback will be used to optimize small usability wins without compromising values.
+
+\subsection*{Behavioral Shifts Required}
+The app encourages reflection and intentionality, which may conflict with habitual “quick add” or passive social app behavior. Some users may resist or disengage.
+
+\textit{Mitigation:} Optional features like journaling, tags, or self-rating may encourage light-touch reflection. Clear value communication will help align expectations.
+
+\section{Bias and Reliability Concerns}
+
+\subsection*{Selection Bias}
+Participants are likely to be tech-savvy, privacy-conscious peers of the author. This skews perception and generalizability.
+
+\textit{Mitigation:} The distinction between Active and Light Participants helps include casual users. Surveys will record user background and prior experience with similar tools.
+
+\subsection*{Social Desirability Bias}
+Survey responses, especially around “connectedness” or privacy values, may reflect what participants think is expected rather than authentic experience.
+
+\textit{Mitigation:} Surveys will be anonymous and optional. Wording will avoid moral framing (e.g., “privacy-respecting” vs. “centralized”) to reduce leading bias.
+
+\subsection*{Data Completeness}
+Usage data is entirely local and opt-in, meaning some valuable insights may be missing or incomplete.
+
+\textit{Mitigation:} Qualitative notes and participant reflection may help fill gaps. Any usage data collected will be treated as supplemental, not definitive.
 
 
 
 %===========================================
 \chapter{Expected Outcomes}
 % What will success look like? What kind of results do you expect?
-\section{User Impact}%
-\section{Technical Deliverables}%
+% \section{User Impact}%
+% \section{Technical Deliverables}%
+
+This project aims to deliver both practical and conceptual contributions: a functioning prototype that demonstrates decentralized, privacy-first contact management, and evaluative insights into its impact on user behavior and perception. This chapter outlines the expected outcomes from both a user-centered and technical perspective.
+
+\section{User Impact}
+
+The primary expected outcome is a shift in how users conceptualize and manage their digital relationships. Specifically:
+
+\begin{itemize}
+  \item \textbf{Improved Sense of Connectedness:} Users who engage with the prototype are expected to report a greater feeling of intentionality and quality in their interpersonal connections.
+  \item \textbf{Increased Reflection:} Through persona creation and explicit sharing decisions, users may develop a more nuanced understanding of their own social behavior and boundaries.
+  \item \textbf{Awareness of Digital Autonomy:} Exposure to local-first design may provoke critical thinking about platform dependency and data sovereignty, even if users do not adopt the tool long-term.
+  \item \textbf{Usability Feedback:} The project will collect valuable input on what makes decentralized tools approachable to mainstream users, especially in personal communication contexts.
+\end{itemize}
+
+These outcomes will be assessed via surveys, optional interviews, and observational insights from usage data (where consented).
+
+\section{Technical Deliverables}
+
+The project is scoped to deliver a functional prototype and associated infrastructure:
+
+\begin{itemize}
+  \item \textbf{Device-Local Backend Server:} A lightweight, cross-platform service that stores contact data, manages personas, and exposes a local API.
+  \item \textbf{Thin Frontend Interface(s):} At minimum, a terminal interface for demonstration and basic use. Optionally, a mobile-friendly or TUI-based GUI may be included.
+  \item \textbf{QR/Text-Based Exchange Mechanism:} Working implementation of peer-to-peer contact sharing via offline-friendly encodings (e.g., QR codes or plain text snippets).
+  \item \textbf{Survey Infrastructure:} Online forms and Likert-scale tools for conducting the Research Survey, Pre-Usage and Post-Usage surveys.
+  \item \textbf{Evaluation Dataset (Anonymized):} If consented, a small, anonymized dataset including survey responses and optional usage logs to support post-hoc analysis.
+\end{itemize}
+
+Together, these deliverables aim to validate the feasibility of Nym’s design goals and provide a springboard for future iterations or related research.
 
 
 
@@ -116,12 +336,151 @@
 \chapter{Evaluation Plan}
 % How will outcomes be measured? Scales, metrics, methods?
 
+The evaluation of Nym will combine quantitative and qualitative methods to measure both the usability of the prototype and its psychological impact on users. The goal is to assess whether decentralized, privacy-first contact tools can enhance users’ interpersonal connectedness and self-reflection.
+The pre/post surveys will use Likert-scale questions focused on emotional clarity, connectedness, and perceived agency. Questions will be adapted and inspired by instruments used in mental health and digital well-being research \cite{batterham2020mental}.
+
+\section{Evaluation Instruments}
+
+\subsection*{1. Research Survey (RS)}
+This initial survey will gauge general attitudes toward existing contact and social media platforms, collect feature wishes, and inform the prototype’s design. It will include:
+\begin{itemize}
+  \item Open-ended questions about pain points in current systems
+  \item Feature preferences and expectations
+  \item Awareness and perception of digital autonomy and privacy
+\end{itemize}
+
+\subsection*{2. Pre-Usage Survey (BS)}
+Administered immediately before participants begin using the prototype, this survey will:
+\begin{itemize}
+  \item Capture baseline scores using the Social Connectedness Scale and WHO-5 Well-Being Index
+  \item Collect user demographics and relationship management habits
+  \item Assess initial expectations of the tool
+\end{itemize}
+
+\subsection*{3. Post-Usage Survey (AS)}
+After using the prototype for a set period, this follow-up survey will:
+\begin{itemize}
+  \item Repeat the same standardized scales (Connectedness, Well-being)
+  \item Use Likert-scale questions on usability, perceived value, and user control
+  \item Include open-ended prompts about reflection, behavior change, and feature feedback
+\end{itemize}
+
+\subsection*{4. Optional Usage Data}
+Where consent is provided, the prototype will collect lightweight, anonymized usage metrics such as:
+\begin{itemize}
+  \item Number of contacts created and exchanged
+  \item Frequency of persona switching or customization
+  \item Duration and frequency of app usage
+\end{itemize}
+These will help contextualize survey responses with actual behavior.
+
+\section{Success Criteria}
+
+The project will be considered successful if:
+
+\begin{itemize}
+  \item At least 10--15 participants complete the full evaluation cycle (BS $\rightarrow$ usage $\rightarrow$ AS)
+  \item There is a ≥10\% increase in average Connectedness scores post-usage
+  \item ≥70\% of participants rate the tool positively in terms of usefulness and privacy
+  \item Qualitative feedback reveals reflection, empowerment, or behavioral change
+  \item The QR/text-based exchange mechanism proves usable in real settings
+\end{itemize}
+
+\section{Analysis Approach}
+
+\begin{itemize}
+  \item \textbf{Quantitative:} Paired t-tests (or non-parametric equivalent) for pre/post survey scores. Descriptive statistics and correlation analysis on Likert responses and usage data.
+  \item \textbf{Qualitative:} Thematic coding of open-ended answers to extract insights on user perception, challenges, and emotional response.
+\end{itemize}
+
+This multi-method approach ensures both measurable effects and deeper understanding of Nym’s potential impact.
+
 
 
 %===========================================
 \chapter{Timeline}
 % Week-by-week or phase-based breakdown of your work plan.
 % Use an itemized or enumerated list.
+
+To estimate development time realistically across academic obligations, internship, and holiday breaks, this timeline assumes that one month of available work corresponds to approximately three active work weeks.
+
+\renewcommand{\arraystretch}{1.4} % Adds vertical spacing between rows
+
+\addcontentsline{lot}{table}{Planned Timeline from June 2025 to May 2026.}
+\begin{longtable}{|l|l|p{7.5cm}|p{4cm}|}
+\caption[]{Planned Timeline from June 2025 to May 2026. Assumes 1 month = 3 working weeks.} \\
+\hline
+\textbf{Month} & \textbf{Duration} & \textbf{Task(s)} & \textbf{Notes} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Month} & \textbf{Duration} & \textbf{Task(s)} & \textbf{Notes} \\
+\hline
+\endhead
+
+June 2025     & -        & \textbf{T1:} Finish expose (due 26th June) & - \\
+              & 1 week   & \textbf{T2:} Light literature review & Establish background context. \\
+\hline
+July 2025     & 2 weeks  & \textbf{T3:} Research Survey (RS) and architecture
+                           planning & Define questions. Explore options for Tech Stack. \\
+              & 1 week   & \textbf{T4:} Design UI and mockup & Low-fidelity, early concepts. \\
+\hline
+August 2025   & 1 week   & \textbf{T5:} Write and pilot RS & Write RS. Feedback round from pilot group. \\
+              & 1 week   & \textbf{T6:} Launch RS and promote & Share among target demographics. \\
+              & 1 week   & \textbf{T7:} Analyse RS results & Identify trends and
+                                                             priorities. \\
+\hline
+September 2025 & 1 week  & \textbf{T8:} Define prototype components & Technical scope planning. \\
+               & 2 weeks & \textbf{T9:} Small-scale code prototype &
+                                                                     Proof-of-concept,
+                                                                     wide prototype. \\
+\hline
+October 2025  & 3 weeks  & \textbf{T10:} Core backend development & Device-local
+                                                                    server,
+                                                                    communication
+                                                                    logic and
+                                                                    data models. \\
+\hline
+November 2025 & 1 week   & \textbf{T11:} Terminal frontend development & CLI
+                                                                         interface
+                                                                         with
+                                                                         debugging
+                                                                         suite. \\
+              & 2 weeks  & \textbf{T12:} Mobile frontend development & Minimal
+                                                                       UI. Focus
+                                                                       on
+                                                                       simplicity.
+                                                                       Explore
+                                                                       Mobile Frameworks. \\
+\hline
+December 2025 & 1 week   & \textbf{T13:} Finalise peer-to-peer method & QR or textual sharing, offline viable. \\
+              & 1 week   & \textbf{T14:} Internal prototype testing & Basic UX validation. \\
+              & 1 week   & \textbf{T15:} Prepare pre/post surveys (BS, AS) & Reflection and metrics planning. \\
+\hline
+\multicolumn{4}{|c|}{\textbf{--- 2026 ---}} \\
+\hline
+January 2026  & 1 week   & \textbf{T16:} Recruit users for trial & Dedicated and passive participants. \\
+              & 2 weeks  & \textbf{T17:} Publish stable release candidate &
+                                                                            Feature-complete
+                                                                            for
+                                                                            testing.
+                                                                            Export
+                                                                            to
+                                                                            APK.
+  Attempt publishing to Mobile Play Stores. \\
+\hline
+February 2026 & 3 weeks  & \textbf{T18:} Run user trial & Mixed demographic, opt-in usage tracking. \\
+\hline
+March 2026    & 1 week   & \textbf{T19:} Collect and clean data & Ensure structure and validity. \\
+              & 2 weeks  & \textbf{T20:} Analyze quantitative and qualitative data & Address research questions. \\
+\hline
+April 2026    & 2 weeks  & \textbf{T21:} Write thesis & Draft all chapters. \\
+              & 1 week   & \textbf{T22:} Revise, proofread, format & Final polish and formatting. \\
+\hline
+May 2026      & 1 week   & \textbf{T23:} Submit final thesis & Due 4th May. \\
+\hline
+\end{longtable}
 
 % Optional appendices can be added at the end if needed
 
@@ -144,14 +503,15 @@
 	\bibliography{references}
 	
 
-\begin{appendices} % optional
-\chapter{Example Appendix 1}
+% \begin{appendices} % optional
+% \chapter{Example Appendix 1}
 
-Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables. 
+% Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables.
 
-\chapter{Example Appendix 2}
+% \chapter{Example Appendix 2}
 
-Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables. 
-	
-\end{appendices}
+% Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables.
+
+% \end{appendices}
+
 \end{document}
